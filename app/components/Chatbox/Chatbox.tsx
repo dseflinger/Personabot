@@ -2,14 +2,24 @@
 
 import React, { useState } from 'react'
 import './Chatbox.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+
+type Message = { // todo can probably use the built in thing
+    role: "user" | "ai";
+    content: string;
+}
+
 
 const Chatbox = () => {
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState("");
     const [messages, setMessages] = useState([]);
 
     // todo figure out better way to use keys
 
-    const generateHaiku = async (e: any) => {
+    const sendMessage = async (e: any) => {
+        if (!input.trim()) return;
+
         e.preventDefault();
         const response = await fetch('/api/generate-haiku', {
             method: 'POST',
@@ -27,22 +37,6 @@ const Chatbox = () => {
         console.log(haiku);
     }
 
-    const handleSubmit = async (e: any) => {
-
-        // e.preventDefault();
-        // if (!input) return;
-
-        // const response = await fetch('/api/chat', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ message: input }),
-        // });
-
-        // const data = await response.json();
-        // //todo fix
-        // // setMessages([...messages, { user: 'You', text: input }, { user: 'Bot', text: data.reply }]);
-        // setInput('');
-    };
     return (
         <div style={{ maxWidth: 600, margin: '50px auto', textAlign: 'center' }}>
             <h1>PersonaBot</h1>
@@ -52,15 +46,24 @@ const Chatbox = () => {
                     <p key={i}><strong>{msg.user}:</strong> {msg.text}</p>
                 ))} */}
             </div>
-            {/* <form onSubmit={handleSubmit}> */}
-            test
-            <form onSubmit={generateHaiku}>
-                <textarea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Say something..."
-                />
-                <button type="submit">Send</button>
+
+            {/* chat Messages todo make this its own component */}
+            <div>
+
+            </div>
+            <form onSubmit={sendMessage}>
+                <div className='chat-box'>
+                    <textarea
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Say something..."
+                    />
+                    <div className='chat-box-footer'>
+                        <button type="submit"><FontAwesomeIcon className='submit-icon' icon={faArrowUp} />
+                        </button>
+                    </div>
+                </div>
+
             </form>
         </div>
     )

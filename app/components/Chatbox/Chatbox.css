@@ -1,4 +1,39 @@
-textarea {
+.chat-box {
+    border-radius: 8px;
     width: 700px;
+    height: 175px;
     padding: 10px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    /*todo add box shadow*/
+}
+
+.chat-box-footer {
+    display: flex;
+    justify-content: end;
+}
+
+textarea {
+    position: relative;
+    border: none;
+    width: 100%;
+    outline: none;
+    resize: none;
+    height: 670px;
+}
+
+/* todo make theme colors */
+button {
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block;
+    background: rgb(24, 24, 27);
+    height: 30px;
+    width: 30px;
+}
+
+.submit-icon {
+    color: white;
 }
