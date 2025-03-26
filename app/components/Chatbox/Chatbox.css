@@ -23,6 +23,8 @@ textarea {
     height: 670px;
 }
 
+/* todo add border and/or box shadow on focus chatbox */
+
 /* todo make theme colors */
 button {
     padding: 4px;
@@ -32,6 +34,10 @@ button {
     background: rgb(24, 24, 27);
     height: 30px;
     width: 30px;
+}
+
+button:hover {
+    background-color: #383838;
 }
 
 .submit-icon {

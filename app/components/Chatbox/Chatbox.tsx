@@ -4,37 +4,42 @@ import React, { useState } from 'react'
 import './Chatbox.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { CharacterType } from '@/app/types/Character';
+import { ChatResponse } from '@/app/types/ChatResponse';
 
 type Message = { // todo can probably use the built in thing
-    role: "user" | "ai";
+    role: "user" | "assistant";
     content: string;
 }
 
 
 const Chatbox = () => {
     const [input, setInput] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [character, setCharacter] = useState<CharacterType>(CharacterType.pirate);
 
     // todo figure out better way to use keys
-
-    const sendMessage = async (e: any) => {
+    const onSubmitMessage = async (e: any) => {
         if (!input.trim()) return;
 
-        e.preventDefault();
-        const response = await fetch('/api/generate-haiku', {
+        setInput("");
+
+        const newUserMessage: Message = { role: "user", content: input };
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ prompt: "Write a haiku about AI" })
+            body: JSON.stringify({ message: input, character, history: messages })
         });
         if (!response.ok) {
             console.error('Failed to fetch:', response.statusText);
             return;
         }
 
-        const haiku = await response.text();
-        console.log(haiku);
+        const data: ChatResponse = await response.json();
+        const newBotMessage: Message = { role: "assistant", content: data.message };
+        setMessages((prevMessages) => [...prevMessages, newUserMessage, newBotMessage]);
     }
 
     return (
@@ -49,13 +54,21 @@ const Chatbox = () => {
 
             {/* chat Messages todo make this its own component */}
             <div>
-
+                {messages.map(msg => (
+                    <p>{msg.content}</p>
+                ))}
             </div>
-            <form onSubmit={sendMessage}>
+            <form onSubmit={onSubmitMessage}>
                 <div className='chat-box'>
                     <textarea
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                onSubmitMessage(e);
+                            }
+                        }}
                         placeholder="Say something..."
                     />
                     <div className='chat-box-footer'>

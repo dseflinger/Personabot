@@ -1,4 +1,5 @@
 // todo should i get rid of the type?
+// todo is this in the right location?
 export class Character {
     type: CharacterType;
     prompt: string;
