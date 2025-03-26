@@ -62,7 +62,7 @@ const Chatbox = () => {
             <div className=" overflow-y-auto flex-1 mb-2 pt-2">
                 <div className='flex flex-col gap-y-4 mx-auto max-w-xl w-full'>
                     {messages.map((msg, idx) => (
-                        <div key={idx} className={msg.role === "user" ? "self-end bg-blue-500 text-white rounded-lg p-3" : "self-start bg-gray-300 text-black"}>
+                        <div key={idx} className={`rounded-xl px-3 py-2 ${msg.role === "user" ? "self-end bg-blue-500 text-white" : "self-start bg-gray-300 text-black"}`}>
                             <p>{msg.content}</p>
                         </div>
                     ))}
@@ -70,24 +70,26 @@ const Chatbox = () => {
             </div>
 
             {/* Chat input box */}
-            <form onSubmit={onSubmitMessage} className="sticky bottom-0 bg-white w-full justify-center">
-                <div className="p-3 border-1 rounded-lg mx-auto max-w-xl w-full">
-                    <textarea
-                        className="w-full h-15 resize-none outline-none"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                onSubmitMessage(e);
-                            }
-                        }}
-                        placeholder="Say something..."
-                    />
-                    <div className="flex justify-end">
-                        <button type="submit" className="p-3 bg-blue-500 rounded-full w-8 h-8 flex justify-center items-center cursor-pointer">
-                            <FontAwesomeIcon className="text-white" icon={faArrowUp} />
-                        </button>
+            <form onSubmit={onSubmitMessage} className="sticky bottom-0 bg-white w-full">
+                <div className="w-full flex justify-center">
+                    <div className="p-3 border border-gray-300 rounded-lg mx-auto max-w-2xl w-full shadow-lg">
+                        <textarea
+                            className="w-full h-15 resize-none outline-none"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    onSubmitMessage(e);
+                                }
+                            }}
+                            placeholder="Say something..."
+                        />
+                        <div className="flex justify-end">
+                            <button type="submit" className="shadow-lg hover:shadow-xl p-3 bg-blue-500 rounded-full w-8 h-8 flex justify-center items-center cursor-pointer">
+                                <FontAwesomeIcon className="text-white" icon={faArrowUp} />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
