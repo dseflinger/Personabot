@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  /* Prevent page scroll */
+  margin: 0;
+  /* Remove any default margins */
+}

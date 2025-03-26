@@ -4,10 +4,10 @@ import Chatbox from "./components/Chatbox/Chatbox";
 export default function Home() {
   return (
     <div className="w-full">
-      <header className="bg-blue-500 text-white p-4">
+      <header className="p-4 bg-white shadow-md sticky top-0 z-10">
         Personabot
       </header>
-      <main className="max-w-3xl mx-auto p-4">
+      <main className="">
         <Chatbox />
 
         {/* <div className="flex gap-4 items-center flex-col sm:flex-row">

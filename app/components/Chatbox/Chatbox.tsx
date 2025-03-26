@@ -56,21 +56,24 @@ const Chatbox = () => {
     }
 
     return (
-        <div className='p-4 flex flex-col h-[calc(100vh-8rem)]'>
-            {/* chat Messages todo make this its own component */}
-            <div className='flex flex-col gap-y-4 overflow-y-auto' >
-                {
-                    messages.map(msg => (
-                        <div className={msg.role == "user" ? "self-end bg-blue-500 text-white rounded-lg p-3" : "self-start bg-gray-300 text-black"}>
-                            <p> {msg.content}</p>
+        <div className="flex flex-col w-full h-[calc(100vh-6rem)]"> {/* This div takes the available space minus header height */}
+
+            {/* Container for messages */}
+            <div className=" overflow-y-auto flex-1 mb-2 pt-2">
+                <div className='flex flex-col gap-y-4 mx-auto max-w-xl w-full'>
+                    {messages.map((msg, idx) => (
+                        <div key={idx} className={msg.role === "user" ? "self-end bg-blue-500 text-white rounded-lg p-3" : "self-start bg-gray-300 text-black"}>
+                            <p>{msg.content}</p>
                         </div>
-                    ))
-                }
+                    ))}
+                </div>
             </div>
-            <form onSubmit={onSubmitMessage} className="sticky bottom-0 mt-3 bg-white">
-                <div className='p-3 border-1 rounded-lg h-30 z-99'>
+
+            {/* Chat input box */}
+            <form onSubmit={onSubmitMessage} className="sticky bottom-0 bg-white w-full justify-center">
+                <div className="p-3 border-1 rounded-lg mx-auto max-w-xl w-full">
                     <textarea
-                        className='h-9 outline-none resize-none h-15 w-full'
+                        className="w-full h-15 resize-none outline-none"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -81,13 +84,12 @@ const Chatbox = () => {
                         }}
                         placeholder="Say something..."
                     />
-                    <div className='flex justify-end'>
-                        <button type="submit" className='p-3 bg-blue-500 rounded-full w-8 h-8 flex justify-center align-center items-center cursor-pointer'>
-                            <FontAwesomeIcon className='submit-icon text-white' icon={faArrowUp} />
+                    <div className="flex justify-end">
+                        <button type="submit" className="p-3 bg-blue-500 rounded-full w-8 h-8 flex justify-center items-center cursor-pointer">
+                            <FontAwesomeIcon className="text-white" icon={faArrowUp} />
                         </button>
                     </div>
                 </div>
-
             </form>
         </div>
     )
