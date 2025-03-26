@@ -1,4 +1,4 @@
-.chat-box {
+/* .chat-box {
     border-radius: 8px;
     width: 700px;
     height: 175px;
@@ -7,26 +7,26 @@
     display: flex;
     flex-direction: column;
     /*todo add box shadow*/
-}
+/*}
 
-.chat-box-footer {
+/* .chat-box-footer {
     display: flex;
     justify-content: end;
-}
+} */
 
-textarea {
+/* textarea {
     position: relative;
     border: none;
     width: 100%;
     outline: none;
     resize: none;
     height: 670px;
-}
+} */
 
 /* todo add border and/or box shadow on focus chatbox */
 
 /* todo make theme colors */
-button {
+/* button {
     padding: 4px;
     border-radius: 50%;
     cursor: pointer;
@@ -42,4 +42,7 @@ button:hover {
 
 .submit-icon {
     color: white;
-}
+} */
+
+
+/* chat messages  todo maybe move this to its own file*/
