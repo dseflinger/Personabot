@@ -29,7 +29,5 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  /* Prevent page scroll */
   margin: 0;
-  /* Remove any default margins */
 }

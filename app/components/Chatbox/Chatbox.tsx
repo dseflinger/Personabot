@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react'
-import './Chatbox.css'
+import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
-import { CharacterType } from '@/app/types/Character';
+import { CharacterType, Characters } from '@/app/types/Character';
 import { ChatResponse } from '@/app/types/ChatResponse';
+import './Chatbox.css'
 
 type Message = { // todo can probably use the built in thing
     role: "user" | "assistant";
@@ -25,19 +25,32 @@ const fakeData: Message[] = [
 
 
 const Chatbox = () => {
+    const chatEndRef = useRef<HTMLDivElement | null>(null);
+
     const [input, setInput] = useState("");
-    // const [messages, setMessages] = useState<Message[]>([]); //uncomment when ui done
-    const [messages, setMessages] = useState<Message[]>(fakeData);
+    const [messages, setMessages] = useState<Message[]>([]); //uncomment when ui done
+    const [isTyping, setIsTyping] = useState<boolean>(false);
+    // const [messages, setMessages] = useState<Message[]>(fakeData);
     const [character, setCharacter] = useState<CharacterType>(CharacterType.pirate);
+
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const tabClass = (tab: CharacterType) =>
+        `px-4 py-2 text-lg font-semibold border-b-2 transition-colors ease-in cursor-pointer ${character === tab ? "border-blue-500 text-blue-600" : "border-transparent hover:border-gray-500 hover:rounded-lg hover:bg-gray-200 border-none"
+        }`;
 
     // todo figure out better way to use keys
     const onSubmitMessage = async (e: any) => {
-        return; // uncomment when ui is done
+        // return; // uncomment when ui is done
         if (!input.trim()) return;
 
         setInput("");
+        setIsTyping(true);
 
         const newUserMessage: Message = { role: "user", content: input };
+        setMessages((prevMessages) => [...prevMessages, newUserMessage]);
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
@@ -45,32 +58,46 @@ const Chatbox = () => {
             },
             body: JSON.stringify({ message: input, character, history: messages })
         });
+        setIsTyping(false);
         if (!response.ok) {
             console.error('Failed to fetch:', response.statusText);
+            // todo display some error message
             return;
         }
 
         const data: ChatResponse = await response.json();
         const newBotMessage: Message = { role: "assistant", content: data.message };
-        setMessages((prevMessages) => [...prevMessages, newUserMessage, newBotMessage]);
+        setMessages((prevMessages) => [...prevMessages, newBotMessage]);
     }
 
     return (
         <div className="flex flex-col w-full h-[calc(100vh-6rem)]"> {/* This div takes the available space minus header height */}
-
+            <div className="flex space-x-4 bg-blue-50 p-2 justify-center shadow-md">
+                <button onClick={() => setCharacter(CharacterType.bard)} className={tabClass(CharacterType.bard)} id="bard">🎭 Bard</button>
+                <button onClick={() => setCharacter(CharacterType.pirate)} className={tabClass(CharacterType.pirate)} id="pirate">🏴‍☠️ Pirate</button>
+                <button onClick={() => setCharacter(CharacterType.wizard)} className={tabClass(CharacterType.wizard)} id="wizard">🧙‍♂️ Wizard</button>
+            </div>
             {/* Container for messages */}
-            <div className=" overflow-y-auto flex-1 mb-2 pt-2">
+            <div className="overflow-y-auto flex-1 my-2 pt-2 p-2 sm:p-0">
                 <div className='flex flex-col gap-y-4 mx-auto max-w-xl w-full'>
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`rounded-xl px-3 py-2 ${msg.role === "user" ? "self-end bg-blue-500 text-white" : "self-start bg-gray-300 text-black"}`}>
                             <p>{msg.content}</p>
                         </div>
                     ))}
+                    <div ref={chatEndRef} />
+                    {isTyping && (
+                        <div className="typing-indicator">
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* Chat input box */}
-            <form onSubmit={onSubmitMessage} className="sticky bottom-0 bg-white w-full">
+            <form onSubmit={onSubmitMessage} className="sticky bottom-0 bg-white w-full p-2 sm:p-0">
                 <div className="w-full flex justify-center">
                     <div className="p-3 border border-gray-300 rounded-lg mx-auto max-w-2xl w-full shadow-lg">
                         <textarea
@@ -83,7 +110,7 @@ const Chatbox = () => {
                                     onSubmitMessage(e);
                                 }
                             }}
-                            placeholder="Say something..."
+                            placeholder={Characters[character].placeholderText}
                         />
                         <div className="flex justify-end">
                             <button type="submit" className="shadow-lg hover:shadow-xl p-3 bg-blue-500 rounded-full w-8 h-8 flex justify-center items-center cursor-pointer">

@@ -1,48 +1,21 @@
-/* .chat-box {
-    border-radius: 8px;
-    width: 700px;
-    height: 175px;
-    padding: 10px;
-    border: 1px solid #ddd;
+.typing-indicator {
     display: flex;
-    flex-direction: column;
-    /*todo add box shadow*/
-/*}
-
-/* .chat-box-footer {
-    display: flex;
-    justify-content: end;
-} */
-
-/* textarea {
-    position: relative;
-    border: none;
-    width: 100%;
-    outline: none;
-    resize: none;
-    height: 670px;
-} */
-
-/* todo add border and/or box shadow on focus chatbox */
-
-/* todo make theme colors */
-/* button {
-    padding: 4px;
+    gap: 4px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: gray;
     border-radius: 50%;
-    cursor: pointer;
-    display: block;
-    background: rgb(24, 24, 27);
-    height: 30px;
-    width: 30px;
-}
-
-button:hover {
-    background-color: #383838;
-}
-
-.submit-icon {
-    color: white;
-} */
-
-
-/* chat messages  todo maybe move this to its own file*/
+    animation: blink 1.5s infinite;
+  }
+  
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  
